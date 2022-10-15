@@ -1,12 +1,14 @@
-from turtle import right
-from xml.dom.minidom import Element
-
-
 class myMinHeap:
 
-    def __init__(self):
-        self.heap = []
-        self.heapSize = 0
+    def __init__(self, L = None):
+        if L is None:
+            self.heap = []
+            self.heapSize = 0
+        else:
+            self.heap = L
+            self.heapSize = len(L)
+            self.heapify()
+
     def __repr__(self):
         return str(self.heap[0:self.heapSize])
 
@@ -17,18 +19,19 @@ class myMinHeap:
             element = self.heap[0]
             lastElement = self.heap[self.heapSize-1]
             self.heap[0] = lastElement
-            self.percolateDown()
+            self.percolateDown(indexToPerc = 0)
             self.heapSize -= 1
             return element
 
-    def percolateDown(self):
+    def percolateDown(self, indexToPerc):
         """
         To percolate the top element down, we 
         compare the element to it's two children,
         and replace it with the smaller of it's two children,
         until the element is smaller than both it's children.
         """
-        currentIndex = 0
+        currentIndex = indexToPerc
+
         leftChildIndex = (2*currentIndex) +  1
         rightChildIndex = (2*currentIndex) + 2
         while (currentIndex <= self.heapSize-1) and \
@@ -87,32 +90,17 @@ class myMinHeap:
             # this works bc of the heap property! 
             currentIndex = parentIndex
             parentIndex = (currentIndex-1)//2
-
-
-test = myMinHeap()
-
-test.push(10)
-test.push(50)
-test.push(70)
-test.push(60)
-
-test.push(0)
-test.push(40)
-test.push(20)
-test.push(30)
-print("test:", test)
-test.pop()
-print("test:", test)
-test.pop()
-print("test:", test)
-test.pop()
-print("test:", test)
-test.pop()
-print("test:", test)
-test.pop()
-print("test:", test)
-test.pop()
-print("test:", test)
-test.pop()
-print("test:", test)
-# test.percolateUp(6)
+    
+    def heapify(self):
+        """
+        To heapify a tree that doesn't satisfy the 
+        order property, we iterate backwards
+        through the tree and percolate every element 
+        with children down.
+        """
+        
+        firstIndexWithChildren = (self.heapSize//2)-1
+        index = firstIndexWithChildren
+        while (index >= 0):
+            self.percolateDown(index)
+            index -= 1
