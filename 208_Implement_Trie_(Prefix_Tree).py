@@ -1,15 +1,34 @@
 class Node():
+    """
+    Node objects are very simple. 
+    children is a dictionary where 
+    the keys are letters and the 
+    values are Node objects associated
+    with those letters.
+
+    isEndOfWord is a boolean value that denotes
+    whether this particular node/letter is the 
+    end of a word or not. 
+    """
     def __init__(self, children, isEndOfWord):
         self.children = children
         self.isEndOfWord = isEndOfWord
 
-    def __str__(self):
-        output = "children:"
-        output += str(self.children)
-        return output
-
 class Trie(object):
-
+    """
+    Implementation of a Trie data structure.
+    Supports the following operations:
+        Insert(element): 
+            Inserts element in to trie.
+            Runtime: Average Case: O(average word length) 
+        Search(element):
+            Checks to see if element has been added to trie. 
+            Runtime: Average Case: O(average word length)
+        startsWith(prefix):
+            Checks to see if there exists a word in the trie
+            with a given prefix. 
+            Runtime: Average Case: O(average word length)
+    """
     def __init__(self):
         self.root = Node(children = {}, isEndOfWord = False)
 
@@ -26,25 +45,55 @@ class Trie(object):
             self.insertHelper(word, self.root)
     
     def insertHelper(self, word, node):
-        if (len(node.children) == 0) and (len(word) > 1):
-            node.children[word[0]] = Node(children = {}, isEndOfWord = False)
-            self.insertHelper(word[1:], node.children[word[0]])
-        elif (len(node.children) == 0) and (len(word) == 1):
-            node.children[word[0]] = Node(children = {}, isEndOfWord = True)
-        
-        # if we get here,
-        # node.children is not empty!
+        """
+        Idea:
+            To insert a word into the trie, 
+            we first check to see if the first
+            letter of the word is in the trie.
+            If it's not, we make a node for it, 
+            and recurisvely add the rest of the word.
+            If it is, we navigate down to that letters
+            children and recursively add the rest of the word.
+
+            The reason this code is long and ugly is because
+            there's lots of edge cases. 
+            We need different logic when we've reached
+            the bottom of the trie, or when we've 
+            reached the end of the word, or when 
+            we're trying to insert a word that's just
+            a prefix of an already inserted word. 
+
+        """
+        firstLetter = word[0]
+        if len(node.children) == 0 and len(word) == 1:
+            # if node has no children, AND we're at the end of a word,
+            # then we need to denote that the new Node is the end of a word.
+            newNode = Node(children = {}, isEndOfWord = True)
+            node.children[firstLetter] = newNode
+        elif (len(node.children) == 0) and (len(word) > 1):
+            # if node has no children, then we're at the
+            # bottom of the trie. So, make a new node. 
+            newNode = Node(children = {}, isEndOfWord = False)
+            node.children[firstLetter] = newNode
+            self.insertHelper(word[1:], node.children[firstLetter])
         elif len(word) == 1:
-            if word[0] in node.children:
-                node.children[word[0]].isEndOfWord = True
+            # if we're only adding one letter to the trie, we do one of two things:
+            # Set isEndOfWord to True for the letter, if it's already in the trie
+            # Build a new node and add it to the trie.
+            if firstLetter in node.children:
+                node.children[firstLetter].isEndOfWord = True
             else:
-                node.children[word[0]] = Node(children = {}, isEndOfWord = True)
+                newNode = Node(children = {}, isEndOfWord = True)
+                node.children[firstLetter] = newNode
         else:
-            if word[0] in node.children:
-                self.insertHelper(word[1:], node.children[word[0]])
+            # most general case: word has several letters
+            # AND the node we're looking at has children. 
+            restOfWord = word[1:]
+            if firstLetter in node.children:
+                self.insertHelper(restOfWord, node.children[firstLetter])
             else:
-                node.children[word[0]] = Node(children = {}, isEndOfWord = False)
-                self.insertHelper(word[1:], node.children[word[0]])
+                node.children[firstLetter] = Node(children = {}, isEndOfWord = False)
+                self.insertHelper(restOfWord, node.children[firstLetter])
         
 
     def search(self, word):
@@ -58,9 +107,18 @@ class Trie(object):
     
 
     def searchHelper(self, word, node):
-        # print("word:", word)
-        # print("node:", str(node))
-        # print()
+        """
+        Idea: 
+            A word is in the trie if and only if 
+            the first letter is in the trie, AND 
+            the rest of the word is in the trie.
+            The edge cases are pretty easy. 
+
+            Keep in mind that node every node 
+            in the trie is the end of a word, so 
+            we need to check the boolean
+            associated with the end of the node. 
+        """
         firstLetter = word[0]
         if len(node.children) == 0 or not(firstLetter in node.children):
             return False
@@ -84,76 +142,19 @@ class Trie(object):
             return self.startsWithHelper(prefix, self.root)
     
     def startsWithHelper(self, prefix, node):
+        """
+        Very similar idea to search, 
+        but with slightly different handling 
+        of the node.isEndOfBoolean variable. 
+        """
         firstLetter = prefix[0]
         if len(node.children) == 0:
             return False
         elif len(prefix) == 1:
             return (firstLetter in node.children)
         elif len(prefix) > 1:
-            return (firstLetter in node.children) and (self.startsWithHelper(prefix[1:], node.children[firstLetter]))
+            restOfPrefix = prefix[1:]
+            return (firstLetter in node.children and 
+                   self.startsWithHelper(restOfPrefix, node.children[firstLetter]))
         else:
             return False # we should never get here, but just in case! 
-
-
-
-# Your Trie object will be instantiated and called as such:
-obj = Trie()
-obj.insert("aaa")
-obj.insert("aab")
-obj.insert("aac")
-obj.insert("aad")
-obj.insert("aa")
-obj.insert("ab")
-obj.insert("ac")
-obj.insert("ad")
-
-print("obj.startsWith('aaa'):", obj.startsWith('aaa'))
-
-# print("obj.startsWith('a'):", obj.startsWith('a'))
-# print("obj.startsWith('ab'):", obj.startsWith('ab'))
-# print("obj.startsWith('ac'):", obj.startsWith('ac'))
-# print("obj.startsWith('ad'):", obj.startsWith('ad'))
-# print()
-
-# print("obj.startsWith('aa'):", obj.startsWith('aa'))
-# print("obj.startsWith('aab'):", obj.startsWith('aab'))
-# print("obj.startsWith('aac'):", obj.startsWith('aac'))
-# print("obj.startsWith('aad'):", obj.startsWith('aad'))
-# print()
-
-# print("obj.startsWith('aaaa'):", obj.startsWith('aaaa'))
-# print("obj.startsWith('aaab'):", obj.startsWith('aaab'))
-# print("obj.startsWith('aaac'):", obj.startsWith('aaac'))
-# print("obj.startsWith('aaad'):", obj.startsWith('aaad'))
-# print()
-# print("Beginning of Search Tests:")
-# print()
-
-# print("obj.search('a')", obj.search("a"))
-# print("obj.search('aa')", obj.search("aa"))
-# print("obj.search('aaa')", obj.search("aaa"))
-# print()
-
-# print("obj.search('ab')", obj.search("ab"))
-# print("obj.search('ac')", obj.search("ac"))
-# print("obj.search('ad')", obj.search("ad"))
-# print()
-
-# print("obj.search('aab'):", obj.search('aab'))
-# print("obj.search('aac'):", obj.search('aac'))
-# print("obj.search('aad'):", obj.search('aad'))
-
-
-
-# print("obj.search(apple):", obj.search("apple"))
-# print("obj.search(app):  ", obj.search("app"))
-# print("obj.startsWith(a):    ", obj.startsWith("a"))
-# print("obj.startsWith(ap):   ", obj.startsWith("ap"))
-# print("obj.startsWith(app):  ", obj.startsWith("app"))
-# print("obj.startsWith(appl): ", obj.startsWith("appl"))
-# print("obj.startsWith(apple):", obj.startsWith("apple"))
-# print("obj.startsWith(ab)", obj.startsWith("abc"))
-
-
-# param_2 = obj.search(word)
-# param_3 = obj.startsWith(prefix)
