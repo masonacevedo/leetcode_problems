@@ -55,8 +55,8 @@ class Solution(object):
             # If all three are satisfied, add it to the queue and mark as visited.
             for neighbor in neighbors:
                 if self.coordinateInGrid(neighbor, grid) and \
-                self.isOne(neighbor, grid) and \
-                not(neighbor in visitedBefore):
+                        self.isOne(neighbor, grid) and \
+                        not(neighbor in visitedBefore):
                     queue.append(neighbor)
                     visitedBefore.add(neighbor)
 
