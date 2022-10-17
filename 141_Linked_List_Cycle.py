@@ -9,6 +9,15 @@ class Solution(object):
         """
         :type head: ListNode
         :rtype: bool
+            Problem:
+                Given the head of a linked list, 
+                return true if the linked list 
+                has a cycle and return false otherwise.
+            Solution:
+                Maintain a hash set of nodes that we've seen before. 
+                At each step, check to see if we've seen this node before.
+                    If we have, return the node.
+                    If we haven't, add the node to the hash set and continue.
         """
         seenBefore = set()
         currentNode = head
@@ -20,10 +29,3 @@ class Solution(object):
             currentNode = currentNode.next
         
         return False
-
-mySol = Solution()
-h = ListNode(x = 1)
-h.next = None
-
-ans = mySol.hasCycle(h)
-print("ans:", ans)

@@ -9,6 +9,15 @@ class Solution(object):
         """
         :type head: ListNode
         :rtype: bool
+            Problem:
+                Given the head of a linked list, 
+                return true if the linked list 
+                has a cycle and return false otherwise.
+            Solution:
+                Use a slow and a fast pointer. If there's 
+                a cycle, the fast pointer will eventually catch
+                up to the slow pointer. If this never happens, 
+                there is no cycle. 
         """
         slow = head
         fast = head
@@ -20,12 +29,3 @@ class Solution(object):
                 return True
         
         return False
-
-
-
-mySol = Solution()
-h = ListNode(x = 1)
-h.next = None
-
-ans = mySol.hasCycle(h)
-print("ans:", ans)

@@ -9,6 +9,13 @@ class Solution(object):
         """
         :type head: ListNode
         :rtype: ListNode
+            Problem:
+                Given the head of a linked list, determine if it has a cycle.
+                If it does, return the head of the cycle.
+                If it doesn't, return None.
+            Solution:
+                Floyd's Cycle-Finding Algorithm. (google it!)
+                (Uses Slow-Pointer/Fast-Pointer)
         """
 
         slow = head
@@ -27,4 +34,3 @@ class Solution(object):
             slow2 = slow2.next
         
         return slow
-        
