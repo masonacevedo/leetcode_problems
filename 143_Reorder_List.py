@@ -20,13 +20,28 @@ class Solution(object):
         """
         :type head: ListNode
         :rtype: None Do not return anything, modify head in-place instead.
+            Problem:
+                Given the head of a linked list, modify-it-in place
+                so that the nodes have a different ordering. Best
+                illustrated by example.
+                Given:
+                0 -> 1 -> 2 -> ... -> n-1 -> n
+                Change it to:
+                0 -> n -> 1 -> n-1 -> 2 -> n-2 -> .... 
+            Solution:
+                Iterate through the linked list and store 
+                all the nodes in an array. 
+                Then, once we have O(1) access to all the nodes,
+                we can just look at them all and replace whatever 
+                their "next" node is with whatever it "should" be.
+                This is easy to figure out using a mathematical 
+                formula. 
         """
         nodeList = []
         current = head
         while current != None:
             nodeList.append(current)
             current = current.next
-        print("nodeList:", nodeList)
 
         n = len(nodeList)
         for index in range(0, n):
@@ -35,7 +50,6 @@ class Solution(object):
                 nodeList[index].next = None
             else:
                 nodeList[index].next = nodeList[nextIndex]
-        print("nodeList:", nodeList)
         
         return head
 

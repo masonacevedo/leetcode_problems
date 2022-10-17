@@ -3,6 +3,14 @@ class Solution(object):
         """
         :type nums: List[int]
         :rtype: int
+        Problem:
+            Given an array of integers,
+            (which may be positive, negative, 
+            zero, and non-distinct)
+            Find the contiguous subarray 
+            with the maximum sum.
+        Solution:
+            Kadane's algorithm. (Google it!)
         """
         # special case for when the entire
         # list is negative
@@ -10,13 +18,15 @@ class Solution(object):
             return max(nums)
         currentSum = 0
         bestSoFar = 0
-        for index in range(0, len(nums)):
-            if nums[index] > 0:
-                currentSum += nums[index]
+
+        for num in nums:
+            if num > 0:
+                currentSum += num
             else:
-                if (currentSum + nums[index]) > 0:
-                    currentSum += nums[index]
+                if (currentSum + num) > 0:
+                    currentSum += num
                 else:
                     currentSum = 0
             bestSoFar = max(bestSoFar, currentSum)
+        
         return bestSoFar

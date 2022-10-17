@@ -5,6 +5,19 @@ class Solution(object):
         """
         :type n: int
         :rtype: int
+        Problem:
+            Given an integer n, return
+            the number of "1"s in the 
+            binary representation of that number. 
+        Solution:
+            Perform the computations that you
+            would in order to convert the number
+            into a binary string. Every time
+            you'd put in a 1, increment a counter.
+            Return counter at the end. 
+            Note that the binary string's length
+            as a function of n is log(n), so
+            this solution runs in log(n) time. 
         """
         if (n == 0):
             return 0
@@ -17,7 +30,3 @@ class Solution(object):
                 count += 1
             power -= 1
         return count
-
-mySol = Solution()
-
-mySol.hammingWeight(4294967293)

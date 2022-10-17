@@ -9,7 +9,7 @@ class Solution(object):
                 where each 1 represents a square mile of land,
                 and each 0 represents a square mile of ocean, 
                 return the number of islands in the grid. 
-            Idea:
+            Solution:
                 Iterate through the grid.
                 If you stumble upon a zero, do nothing.
                 If you stumble upon a one, then check if you've seen it before.

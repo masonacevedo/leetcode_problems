@@ -5,7 +5,13 @@ class Solution(object):
         """
         :type nums: List[int]
         :rtype: List[int]
-        implements quicksort
+        Problem:
+            Sort an array of numbers.
+        Solution:
+            Add all the numbers to a minHeap,
+            then just keep calling pop.
+            They will pop off the heap
+            in ascending order! 
         """
         heapq.heapify(nums)
         ans = []

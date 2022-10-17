@@ -4,6 +4,19 @@ class Solution(object):
         """
         :type grid: List[List[int]]
         :rtype: int
+            Problem: 
+                Given a grid of 1s and 0s, 
+                where each 1 represents a square mile of land,
+                and each 0 represents a square mile of ocean, 
+                return the size of the biggest island. 
+            Solution:
+                Iterate through the grid.
+                If you stumble upon a zero, do nothing.
+                If you stumble upon a one, then check if you've seen it before.
+                    If you've seen this particular "1" before, do nothing.
+                    If you haven't seen this particular "1" before, use BFS/DFS
+                    to compute the size of the island, while marking pieces of 
+                    land as "seen before." 
         """
         
         biggestIslandSoFar = 0
@@ -19,40 +32,42 @@ class Solution(object):
         return biggestIslandSoFar
     
     def getIslandSize(self, row, col, grid, visitedBefore):
-        
+        """
+        To get the size of an island, we do the following:
+        Save the number of "1"s we've visited before doing BFS
+        Do BFS, and mark all visited nodes as visited.
+        Compare the number of visited nodes now to what 
+        we saved before, and return the difference. 
+        """
         queue = collections.deque()
         queue.append((row,col))
         visitedBeforeSearch = len(visitedBefore)
-        print("visitedBefore:", visitedBefore)
         while len(queue) != 0:
             
             curRow, curCol = queue.popleft()
             visitedBefore.add((curRow, curCol))
-            # if top neighbor exists, is a 1, and hasn't been visited before, add it to queue!
-            if (self.coordinateInGrid(curRow - 1, curCol, grid)) and (grid[curRow-1][curCol] == 1) and not((curRow-1, curCol) in visitedBefore):
-                queue.append((curRow-1, curCol))
-                visitedBefore.add((curRow-1, curCol))
 
-            if (self.coordinateInGrid(curRow + 1, curCol, grid)) and (grid[curRow+1][curCol] == 1) and not((curRow+1, curCol) in visitedBefore):
-                queue.append((curRow+1, curCol))
-                visitedBefore.add((curRow +1, curCol))
+            topNeighbor = (curRow - 1, curCol)
+            rightNeighbor = (curRow, curCol + 1)
+            bottomNeighbor = (curRow + 1, curCol)
+            leftNeighbor = (curRow, curCol - 1)
+            neighbors = [
+                topNeighbor, bottomNeighbor,
+                leftNeighbor, rightNeighbor]
+            
+            for neighbor in neighbors:
+                if self.coordinateInGrid(neighbor, grid)\
+                    and self.isOne(neighbor, grid) \
+                    and not(neighbor in visitedBefore):
+                    queue.append(neighbor)
+                    visitedBefore.add(neighbor)
 
-            if (self.coordinateInGrid(curRow, curCol-1, grid)) and (grid[curRow][curCol-1] == 1) and not((curRow, curCol-1) in visitedBefore):
-                queue.append((curRow, curCol-1))
-                visitedBefore.add((curRow, curCol-1))
-
-            if (self.coordinateInGrid(curRow, curCol+1, grid)) and (grid[curRow][curCol+1] == 1) and not((curRow, curCol+1) in visitedBefore):
-                queue.append((curRow, curCol+1))
-                visitedBefore.add((curRow, curCol+1))
-        print("visitedBefore:", visitedBefore)
         visitedAfterSearch = len(visitedBefore)
-        return visitedAfterSearch - visitedBeforeSearch
+        return (visitedAfterSearch - visitedBeforeSearch)
     
-    def coordinateInGrid(self, row, col, grid):
+    def isOne(self, coordinates, grid):
+        row, col = coordinates
+        return grid[row][col] == 1
+    def coordinateInGrid(self, coordinates, grid):
+        row, col = coordinates
         return (row >=0) and (row < len(grid)) and (col >= 0) and (col < len(grid[0]))
-
-grid = [[0,1]]
-
-mySol = Solution()
-ans = mySol.maxAreaOfIsland(grid)
-print("ans:", ans)

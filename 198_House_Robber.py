@@ -22,6 +22,10 @@ class Solution(object):
         return DPTable[-1]
     
     def robRecursive(self, nums):
+        """
+        This is the slow recursive solution.
+        The optimized DP solution is above.
+        """
         if (len(nums) == 1):
             return nums[0]
         elif (len(nums) == 2):
@@ -30,8 +34,3 @@ class Solution(object):
             robLastHouse = nums[-1] + self.robRecursive(nums[0:len(nums)-2])
             dontRobLastHouse = self.robRecursive(nums[0:len(nums)-1])
             return max(robLastHouse, dontRobLastHouse)
-
-mySol = Solution()
-nums = [2,7,9,3,1]
-ans = mySol.rob(nums)
-print("ans:", ans)

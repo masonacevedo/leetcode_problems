@@ -22,10 +22,3 @@ class Solution(object):
                 return index
         
         return -1
-        
-
-
-mySol = Solution()
-nums = [2,1,-1]
-ans = mySol.pivotIndex(nums)
-print("ans:", ans)

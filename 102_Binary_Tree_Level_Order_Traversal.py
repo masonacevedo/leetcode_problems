@@ -41,16 +41,13 @@ class Solution(object):
         for index in range(0, len(nodesWithLevels)):
             num, currentLevel = nodesWithLevels[index]
             if index == 0:
-                # start a new list
-                ans.append([num])
+                ans.append([num]) # start a new list
             else:
                 prevNum, prevLevel = nodesWithLevels[index-1] # note the index-1 here.
                 if (currentLevel == prevLevel):
-                    # add it to the list of the level we're on.
-                    ans[-1].append(num)
+                    ans[-1].append(num) # add num to the list of the level we're on. 
                 else:
-                    # start a new list
-                    ans.append([num])
+                    ans.append([num]) # start a new list
         
         return ans
     

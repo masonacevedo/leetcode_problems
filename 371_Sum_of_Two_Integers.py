@@ -4,6 +4,16 @@ class Solution(object):
         :type a: int
         :type b: int
         :rtype: int
+        Problem: 
+            Given two integers, return their sum
+            without using the "+" or "-" operators.
+        Solution:
+            Convert the integers into binary strings,
+            add them as binary strings, then convert 
+            them back. 
+        
+        NOTE: This solution works when a and b are 
+        both non-negative. It doesn't work otherwise.
         """
         aString = bin(a)[2:]
         bString = bin(b)[2:]
@@ -12,14 +22,11 @@ class Solution(object):
         return int(sumString,2)
     
     def addBinaryNums(self, s1,s2, carry):
-        # print("s1:", s1)
-        # print("s2:", s2)
-        # print()
         if (len(s1) == 0):
             return self.addBinaryNums("0", s2, carry)
         if (len(s2) == 0):
             return self.addBinaryNums("0", s1, carry)
-        # if both last digits are 1
+        
         numOnes = [s1[-1],s2[-1]].count("1")
         if carry:
             numOnes += 1
@@ -46,7 +53,3 @@ class Solution(object):
             return self.addBinaryNums(restOfS1, restOfS2, carry = True) + "0"
         elif (numOnes == 3):
             return self.addBinaryNums(restOfS1, restOfS2, carry = True) + "1"
-
-mySol = Solution()
-ans = mySol.getSum(10,30)
-print("ans:", ans)

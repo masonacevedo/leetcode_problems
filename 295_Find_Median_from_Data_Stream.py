@@ -4,8 +4,8 @@ class MedianFinder(object):
     """
     This data structure works by keeping two heaps.
     Specifically, a minHeap is used to keep track of the 
-    larger half of the elements so far, and a maxHeap is used
-    to keep track of the smaller half of the elements so far.
+    larger half of the elements added so far, and a maxHeap is used
+    to keep track of the smaller half of the elements added so far.
 
     Then, when a user asks for the median, we have access to
     the smallest of the larger half and the largest of the smaller half.
